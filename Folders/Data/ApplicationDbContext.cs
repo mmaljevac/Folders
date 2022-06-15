@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Folders.Models;
 
 namespace Folders.Data
 {
@@ -11,6 +9,17 @@ namespace Folders.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+        }
+
+        public DbSet<Folder> Folders { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Folder>().ToTable("Folder");
+            modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<Permission>().ToTable("Permission");
         }
     }
 }
