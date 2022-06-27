@@ -1,8 +1,37 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<Folders.Models.Folder>;
+
+@{
+    ViewData["Title"] = "Folder List";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h2>Folder list</h2>
+
+<button class="btn btn-dark my-3">Add</button>
+
+@if(Model.Count() > 0)
+{
+<table class="table table-borderless table-striped">
+    @foreach (var folder in Model)
+    {
+        @if (folder.ParentId == 2)
+        {
+            <tr>
+                <td>@folder.Name</td>
+            </tr>
+            @foreach (var subfolder in Model)
+            {
+                @if (subfolder.ParentId == folder.Id)
+                {
+                    <tr>
+                        <td class="indent">@subfolder.Name</td>
+                    </tr>
+                }
+            }
+        }
+    }
+</table>
+}
+else
+{
+    <p>No folders available.</p>
+}

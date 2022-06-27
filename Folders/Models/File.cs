@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 
 namespace Folders.Models
 {
-    public class Folder
+    public class File
     {
         public int Id { get; set; }
-        public int? ParentId { get; set; }
+        public int FolderId { get; set; }
         public string Name { get; set; }
-        
     }
 }
