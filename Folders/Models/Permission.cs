@@ -8,7 +8,7 @@ namespace Folders.Models
     public class Permission
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public int FolderId { get; set; }
     }
 }

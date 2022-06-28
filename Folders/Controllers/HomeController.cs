@@ -7,24 +7,40 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Folders.Data;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace Folders.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
         
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
-            _logger = logger;
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
         {
             IEnumerable<Folder> foldersList = _context.Folders;
+            IEnumerable<Permission> permissionsList = _context.Permissions;
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewData["userId"] = userId;
+
+            foreach (Permission p in permissionsList)
+            {
+                if (p.UserId == userId)
+                {
+                    int folderId = p.FolderId;
+                    ViewData["folderPermissionId"] = folderId;
+                }
+            }
+
             return View(foldersList);
         }
 
