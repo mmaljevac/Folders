@@ -30,14 +30,13 @@ namespace Folders.Controllers
             IEnumerable<Permission> permissionsList = _context.Permissions;
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ViewData["userId"] = userId;
 
             foreach (Permission p in permissionsList)
             {
                 if (p.UserId == userId)
                 {
                     int folderId = p.FolderId;
-                    ViewData["folderPermissionId"] = folderId;
+                    ViewBag.folderPermissionId = folderId;
                 }
             }
 

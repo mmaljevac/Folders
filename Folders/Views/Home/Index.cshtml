@@ -13,7 +13,8 @@
 <table class="table table-borderless table-striped">
     @foreach (var folder in Model)
     {
-        @*@if (folder.Id == ViewData["folderPermissionId"])*@
+        @if (folder.Id == ViewBag.folderPermissionId)
+        {
             bool hasChild = false;
             @if (folder.ParentId == 2)
             {
@@ -39,6 +40,8 @@
 
                 childFolder(folder, 0);
             }
+
+        }
     }
 </table>
 }
