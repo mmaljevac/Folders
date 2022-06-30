@@ -17,8 +17,23 @@ namespace Folders.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Folder>().ToTable("Folder");
+            modelBuilder.Entity<Folder>().ToTable("Folder")
+                .HasMany(i => i.ChildFolders)
+                .WithOne(i => i.ParentFolder)
+                .HasForeignKey(i => i.ParentId);
+
+            modelBuilder.Entity<Folder>()
+                .HasMany(i => i.Files)
+                .WithOne(i => i.Folder)
+                .HasForeignKey(i => i.FolderId);
+
+            modelBuilder.Entity<Folder>()
+                .HasMany(i => i.Permissions)
+                .WithOne(i => i.Folder)
+                .HasForeignKey(i => i.FolderId);
+
             modelBuilder.Entity<Permission>().ToTable("Permission");
+            
             modelBuilder.Entity<File>().ToTable("File");
 
             base.OnModelCreating(modelBuilder);

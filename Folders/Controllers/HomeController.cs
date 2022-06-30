@@ -16,7 +16,6 @@ namespace Folders.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
-        
 
         public HomeController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
@@ -40,7 +39,39 @@ namespace Folders.Controllers
                 }
             }
 
-            return View(foldersList);
+            var folderViewModels = new List<FolderViewModel>();
+            var parentIds = new List<int?>();
+
+            foreach (Folder folder in foldersList)
+            {
+                if (folder.ParentId != null)
+                {
+                    parentIds.Add(folder.ParentId);
+                }
+            }
+
+            foreach (Folder folder in foldersList)
+            {
+                var childFolders = new List<FolderViewModel>();
+                if (parentIds.Contains(folder.Id)) {
+                    foreach (Folder childFolder in foldersList)
+                    {
+                        if (childFolder.ParentId == folder.Id)
+                        {
+                            childFolders.Add(childFolder);
+                        }
+                    }
+                }
+                folderViewModels.Add(new FolderViewModel
+                {
+                    Id = folder.Id,
+                    ParentId = folder.ParentId,
+                    Name = folder.Name,
+                    ChildFolders = childFolders
+                });
+            }
+
+            return View(folderViewModels);
         }
 
         public IActionResult Privacy()

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Folders.Models.Folder>;
+﻿@model IEnumerable<Folders.FolderViewModel>;
 
 @{
     ViewData["Title"] = "Folders";
@@ -10,40 +10,51 @@
 
 @if (Model.Count() > 0)
 {
-<table class="table table-borderless table-striped">
-    @foreach (var folder in Model)
-    {
-        @if (folder.Id == ViewBag.folderPermissionId)
+    <table class="table table-borderless table-striped">
+        @foreach (var folder in Model)
         {
-            bool hasChild = false;
-            @if (folder.ParentId == 2)
+            //if (folder.ParentFolder.Id == ViewBag.folderPermissionId)
+            //{
+            if (folder.ParentId == null)
             {
-                @foreach (var child in Model)
-                {
-                    if (child.ParentId == folder.Id)
-                    {
-                        hasChild = true;
-                    }
-                }
-                @if (hasChild)
-                {
-                    <tr>
-                        <td><button>+</button> @folder.Name</td>
-                    </tr>
-                }
-                else
-                {
-                    <tr>
-                        <td>@folder.Name</td>
-                    </tr>
-                }
-
-                childFolder(folder, 0);
+                showFolders(folder, 0);
             }
-
+            //}
         }
-    }
-</table>
+
+        @*@foreach (var folder in Model)
+            {
+                @if (folder.Id == ViewBag.folderPermissionId)
+                {
+                    bool hasChild = false;
+                    @if (folder.ParentId == 2)
+                    {
+                        @foreach (var child in Model)
+                        {
+                            if (child.ParentId == folder.Id)
+                            {
+                                hasChild = true;
+                            }
+                        }
+                        @if (hasChild)
+                        {
+                            <tr>
+                                <td><button>+</button> @folder.Name</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td>@folder.Name</td>
+                            </tr>
+                        }
+
+                        childFolder(folder, 0);
+                    }
+
+                }
+            }*@
+    </table>
 }
 else
 {
@@ -51,36 +62,36 @@ else
 }
 
 @{
-    void childFolder(Folder mainFolder, int depth)
+    void showFolders(FolderViewModel folder, int depth)
     {
-        depth++;
-        foreach (var f in Model)
+
+        if (folder.ChildFolders.Count > 0)
         {
-            bool hasChild = false;
-            if (f.ParentId == mainFolder.Id)
+            <tr>
+                <td style="text-indent: @(depth + "rem")"><button>+</button> @folder.Name</td>
+            </tr>
+            
+            depth++;
+
+            var curId = folder.Id;
+
+            foreach (var child in folder.ChildFolders)
             {
-                @foreach (var child in Model)
-                {
-                    if (child.ParentId == f.Id)
-                    {
-                        hasChild = true;
-                    }
-                }
-                @if (hasChild)
-                {
-                    <tr>
-                        <td style="text-indent: @(depth + "rem")"><button>+</button> @f.Name</td>
-                    </tr>
-                }
-                else
-                {
-                    <tr>
-                        <td style="text-indent: @(depth + "rem")">@f.Name</td>
-                    </tr>
-                }
-                childFolder(f, depth);
+                <tr>
+                    <td style="text-indent: @(depth + "rem")">@child.Name</td>
+                </tr>
+                showFolders(child, depth);
             }
         }
+        else
+        {
+            <tr>
+                <td style="text-indent: @(depth + "rem")">@folder.Name</td>
+            </tr>
+
+            depth++;
+        }
+
         depth--;
     }
 }
