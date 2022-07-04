@@ -26,6 +26,7 @@ namespace Folders.Controllers
         public IActionResult Index()
         {
             IEnumerable<Folder> foldersList = _context.Folders.ToList();
+            IEnumerable<File> filesList = _context.Files.ToList();
             var folderViewModels = new List<FolderViewModel>();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -46,12 +47,13 @@ namespace Folders.Controllers
                             ParentId = folder.ParentId,
                             Name = folder.Name,
                             Depth = folder.Depth,
-                            ChildFolders = new List<FolderViewModel>()
+                            ChildFolders = new List<FolderViewModel>(),
+                            Files = new List<File>(filesList.Where(file => file.FolderId == folder.Id))
                         });
                     }
                     else
                     {
-                        findParent(folder, folderViewModels, depth);
+                        findParent(folder, folderViewModels, depth, filesList);
                     }
                 }
             }
@@ -61,7 +63,7 @@ namespace Folders.Controllers
             return View(folderViewModels);
         }
 
-        public void findParent(Folder folder, List<FolderViewModel> folderViewModels, int depth)
+        public void findParent(Folder folder, List<FolderViewModel> folderViewModels, int depth, IEnumerable<File> filesList)
         {
             var parentFolder = folderViewModels.Find(i => i.Id == folder.ParentId);
             if (parentFolder != null)
@@ -72,7 +74,8 @@ namespace Folders.Controllers
                     ParentId = folder.ParentId,
                     Name = folder.Name,
                     Depth = folder.Depth,
-                    ChildFolders = new List<FolderViewModel>()
+                    ChildFolders = new List<FolderViewModel>(),
+                    Files = new List<File>(filesList.Where(file => file.FolderId == folder.Id))
                 };
                 parentFolder.ChildFolders.Add(childFolder);
             }
@@ -80,7 +83,7 @@ namespace Folders.Controllers
             {
                 foreach (var folderViewModel in folderViewModels)
                 {
-                    findParent(folder, folderViewModel.ChildFolders, depth);
+                    findParent(folder, folderViewModel.ChildFolders, depth, filesList);
                 }
             }
         }

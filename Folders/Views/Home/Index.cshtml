@@ -4,26 +4,37 @@
     ViewData["Title"] = "Folders";
 }
 
-<h2>Folders</h2>
+<div class="row">
+    <div class="col-6">
+        <h2>Folders</h2>
 
-<button class="btn btn-dark my-3">Add</button>
+        <button class="btn btn-dark my-3">Add</button>
 
-@if (Model.Count() > 0)
-{
-    <table class="table table-borderless table-striped">
-        @foreach (var folder in Model)
+        @if (Model.Count() > 0)
         {
-            <tr>
-                <td>@folder.Name</td>
-            </tr>
-            showChildren(folder);
+            <table class="table table-borderless table-striped">
+                @foreach (var folder in Model)
+                {
+                    <tr>
+                        <td>@folder.Name</td>
+                    </tr>
+                    showChildren(folder);
+                }
+            </table>
         }
-    </table>
-}
-else
-{
-    <p>No folders available.</p>
-}
+        else
+        {
+            <p>No folders available.</p>
+        }
+    </div>
+    <div class="col-6">
+        <h2>Files</h2>
+
+        <table class="table table-borderless table-striped">
+        </table>
+    </div>
+</div>
+
 
 @{
     void showChildren(FolderViewModel folder)

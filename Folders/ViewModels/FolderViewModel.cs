@@ -13,5 +13,6 @@ namespace Folders
         public string Name { get; set; }
         public int Depth { get; set; }
         public List<FolderViewModel> ChildFolders { get; set; }
+        public List<File> Files { get; set; }
     }
 }
