@@ -30,14 +30,15 @@ namespace Folders.Controllers
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             IEnumerable<Permission> permissionsList = _context.Permissions.Where(p => p.UserId == userId);
+            List<int> folderPermissionIds = permissionsList.Select(p => p.FolderId).ToList();
 
             int maxDepth = foldersList.Max(i => i.Depth);
 
             for (int depth = 0; depth <= maxDepth; depth++)
             {
-                foreach (Folder folder in foldersList.Where(i => i.Depth == depth))
+                foreach (Folder folder in foldersList.Where(f => f.Depth == depth))
                 {
-                    if (depth == 0)
+                    if (depth == 0 && folderPermissionIds.Contains(folder.Id)) // folder permissions
                     {
                         folderViewModels.Add(new FolderViewModel
                         {
