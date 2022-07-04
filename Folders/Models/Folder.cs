@@ -10,6 +10,7 @@ namespace Folders.Models
         public int Id { get; set; }
         public int? ParentId { get; set; }
         public string Name { get; set; }
+        public int Depth { get; set; }
         
         public virtual List<File> Files { get; set; }
 

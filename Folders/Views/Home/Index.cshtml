@@ -13,47 +13,12 @@
     <table class="table table-borderless table-striped">
         @foreach (var folder in Model)
         {
-            //if (folder.ParentFolder.Id == ViewBag.folderPermissionId)
-            //{
-            if (folder.ParentId == null)
-            {
-                showFolders(folder, 0);
-            }
-            //}
+            <tr>
+                <td>@folder.Name</td>
+            </tr>
+
+            showChildren(folder);
         }
-
-        @*@foreach (var folder in Model)
-            {
-                @if (folder.Id == ViewBag.folderPermissionId)
-                {
-                    bool hasChild = false;
-                    @if (folder.ParentId == 2)
-                    {
-                        @foreach (var child in Model)
-                        {
-                            if (child.ParentId == folder.Id)
-                            {
-                                hasChild = true;
-                            }
-                        }
-                        @if (hasChild)
-                        {
-                            <tr>
-                                <td><button>+</button> @folder.Name</td>
-                            </tr>
-                        }
-                        else
-                        {
-                            <tr>
-                                <td>@folder.Name</td>
-                            </tr>
-                        }
-
-                        childFolder(folder, 0);
-                    }
-
-                }
-            }*@
     </table>
 }
 else
@@ -62,36 +27,14 @@ else
 }
 
 @{
-    void showFolders(FolderViewModel folder, int depth)
+    void showChildren(FolderViewModel folder)
     {
-
-        if (folder.ChildFolders.Count > 0)
+        foreach (var child in folder.ChildFolders)
         {
             <tr>
-                <td style="text-indent: @(depth + "rem")"><button>+</button> @folder.Name</td>
+                <td style="text-indent: @(child.Depth + "rem")">@child.Name</td>
             </tr>
-            
-            depth++;
-
-            var curId = folder.Id;
-
-            foreach (var child in folder.ChildFolders)
-            {
-                <tr>
-                    <td style="text-indent: @(depth + "rem")">@child.Name</td>
-                </tr>
-                showFolders(child, depth);
-            }
+            showChildren(child);
         }
-        else
-        {
-            <tr>
-                <td style="text-indent: @(depth + "rem")">@folder.Name</td>
-            </tr>
-
-            depth++;
-        }
-
-        depth--;
     }
 }

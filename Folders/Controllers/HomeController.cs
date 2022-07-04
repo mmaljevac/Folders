@@ -25,54 +25,90 @@ namespace Folders.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Folder> foldersList = _context.Folders;
-            IEnumerable<Permission> permissionsList = _context.Permissions;
+            IEnumerable<Folder> foldersList = _context.Folders.ToList();
+            var folderViewModels = new List<FolderViewModel>();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            IEnumerable<Permission> permissionsList = _context.Permissions.Where(p => p.UserId == userId);
 
-            foreach (Permission p in permissionsList)
+            //foreach (Folder f in foldersList.Where(i => i.ParentId == null))
+            //{
+            //    folderViewModels.Add(createFolderViewModel(f, folderViewModels));
+            //}
+
+            int maxDepth = foldersList.Max(i => i.Depth);
+
+            for (int depth = 0; depth <= maxDepth; depth++)
             {
-                if (p.UserId == userId)
+                foreach (Folder folder in foldersList.Where(i => i.Depth == depth))
                 {
-                    int folderId = p.FolderId;
-                    ViewBag.folderPermissionId = folderId;
-                }
-            }
-
-            var folderViewModels = new List<FolderViewModel>();
-            var parentIds = new List<int?>();
-
-            foreach (Folder folder in foldersList)
-            {
-                if (folder.ParentId != null)
-                {
-                    parentIds.Add(folder.ParentId);
-                }
-            }
-
-            foreach (Folder folder in foldersList)
-            {
-                var childFolders = new List<FolderViewModel>();
-                if (parentIds.Contains(folder.Id)) {
-                    foreach (Folder childFolder in foldersList)
+                    if (depth == 0)
                     {
-                        if (childFolder.ParentId == folder.Id)
+                        folderViewModels.Add(new FolderViewModel
                         {
-                            childFolders.Add(childFolder);
-                        }
+                            Id = folder.Id,
+                            ParentId = folder.ParentId,
+                            Name = folder.Name,
+                            Depth = folder.Depth,
+                            ChildFolders = new List<FolderViewModel>()
+                        });
+                    }
+                    else
+                    {
+                        findParent(folder, folderViewModels, depth);
                     }
                 }
-                folderViewModels.Add(new FolderViewModel
-                {
-                    Id = folder.Id,
-                    ParentId = folder.ParentId,
-                    Name = folder.Name,
-                    ChildFolders = childFolders
-                });
             }
 
             return View(folderViewModels);
         }
+
+        public void findParent(Folder folder, List<FolderViewModel> folderViewModels, int depth)
+        {
+            var parentFolder = folderViewModels.Find(i => i.Id == folder.ParentId);
+            if (parentFolder != null)
+            {
+                FolderViewModel childFolder = new FolderViewModel
+                {
+                    Id = folder.Id,
+                    ParentId = folder.ParentId,
+                    Name = folder.Name,
+                    Depth = folder.Depth,
+                    ChildFolders = new List<FolderViewModel>()
+                };
+                parentFolder.ChildFolders.Add(childFolder);
+            }
+            else
+            {
+                foreach (var folderViewModel in folderViewModels)
+                {
+                    findParent(folder, folderViewModel.ChildFolders, depth);
+                }
+            }
+
+        }
+
+        //public List<FolderViewModel> createFolderViewModel(IEnumerable<Folder> foldersList, List<FolderViewModel> folderViewModels)
+        //{
+        //    var childFolders = new List<FolderViewModel>();
+        //    foreach (Folder childFolder in foldersList)
+        //    {
+        //        if (childFolder.ParentId == folder.Id)
+        //        {
+
+        //            childFolders.Add(new FolderViewModel { Id = childFolder.Id, Name = childFolder.Name, ChildFolders = childFolder });
+        //        }
+        //    }
+        //    folderViewModels.Add(new FolderViewModel
+        //    {
+        //        Id = folder.Id,
+        //        ParentId = folder.ParentId,
+        //        Name = folder.Name,
+        //        ChildFolders = childFolders
+        //    });
+
+        //    return folderViewModels;
+        //}
 
         public IActionResult Privacy()
         {
