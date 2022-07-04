@@ -31,11 +31,6 @@ namespace Folders.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             IEnumerable<Permission> permissionsList = _context.Permissions.Where(p => p.UserId == userId);
 
-            //foreach (Folder f in foldersList.Where(i => i.ParentId == null))
-            //{
-            //    folderViewModels.Add(createFolderViewModel(f, folderViewModels));
-            //}
-
             int maxDepth = foldersList.Max(i => i.Depth);
 
             for (int depth = 0; depth <= maxDepth; depth++)
@@ -59,7 +54,6 @@ namespace Folders.Controllers
                     }
                 }
             }
-
             return View(folderViewModels);
         }
 
@@ -85,30 +79,7 @@ namespace Folders.Controllers
                     findParent(folder, folderViewModel.ChildFolders, depth);
                 }
             }
-
         }
-
-        //public List<FolderViewModel> createFolderViewModel(IEnumerable<Folder> foldersList, List<FolderViewModel> folderViewModels)
-        //{
-        //    var childFolders = new List<FolderViewModel>();
-        //    foreach (Folder childFolder in foldersList)
-        //    {
-        //        if (childFolder.ParentId == folder.Id)
-        //        {
-
-        //            childFolders.Add(new FolderViewModel { Id = childFolder.Id, Name = childFolder.Name, ChildFolders = childFolder });
-        //        }
-        //    }
-        //    folderViewModels.Add(new FolderViewModel
-        //    {
-        //        Id = folder.Id,
-        //        ParentId = folder.ParentId,
-        //        Name = folder.Name,
-        //        ChildFolders = childFolders
-        //    });
-
-        //    return folderViewModels;
-        //}
 
         public IActionResult Privacy()
         {
