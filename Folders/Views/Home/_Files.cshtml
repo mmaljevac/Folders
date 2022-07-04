@@ -1,0 +1,13 @@
+﻿@model MainViewModel
+
+@if (Model.SelectedFolder.Files.Count > 0)
+{
+    <table class="table table-borderless table-striped">
+        @foreach (var file in Model.SelectedFolder.Files)
+        {
+            <tr>
+                <td>@file.Name</td>
+            </tr>
+        }
+    </table>
+}

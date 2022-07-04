@@ -15,4 +15,10 @@ namespace Folders
         public List<FolderViewModel> ChildFolders { get; set; }
         public List<File> Files { get; set; }
     }
+
+    public class MainViewModel
+    {
+        public List<FolderViewModel> Folders { get; set; }
+        public FolderViewModel? SelectedFolder { get; set; }
+    }
 }
