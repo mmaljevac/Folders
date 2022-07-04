@@ -54,6 +54,9 @@ namespace Folders.Controllers
                     }
                 }
             }
+
+            folderViewModels = sortFolders(folderViewModels);
+
             return View(folderViewModels);
         }
 
@@ -79,6 +82,16 @@ namespace Folders.Controllers
                     findParent(folder, folderViewModel.ChildFolders, depth);
                 }
             }
+        }
+
+        public List<FolderViewModel> sortFolders(List<FolderViewModel> folderViewModels)
+        {
+            folderViewModels = folderViewModels.OrderBy(i => i.Name).ToList();
+            foreach (var folder in folderViewModels)
+            {
+                folder.ChildFolders = sortFolders(folder.ChildFolders);
+            }
+            return folderViewModels;
         }
 
         public IActionResult Privacy()
