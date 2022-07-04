@@ -16,9 +16,9 @@
                 @foreach (var folder in Model)
                 {
                     <tr>
-                        <td>@folder.Name</td>
+                        <td><a asp-action="Index" asp-route-id="@folder.Id">@folder.Name</a></td>
                     </tr>
-                    showChildren(folder);
+                    await showChildren(folder);
                 }
             </table>
         }
@@ -31,20 +31,20 @@
         <h2>Files</h2>
 
         <table class="table table-borderless table-striped">
+
         </table>
     </div>
 </div>
 
-
 @{
-    void showChildren(FolderViewModel folder)
+    async System.Threading.Tasks.Task showChildren(FolderViewModel folder)
     {
         foreach (var child in folder.ChildFolders)
         {
             <tr>
-                <td style="text-indent: @(child.Depth + "rem")">@child.Name</td>
+                <td style="text-indent: @(child.Depth + "rem")"><a asp-action="Index" asp-route-id="@child.Id">@child.Name</a></td>
             </tr>
-            showChildren(child);
+            await showChildren(child);
         }
     }
 }
