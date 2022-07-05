@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="col-6">
-        <h2>Folders</h2>
+        <h2 id="btn">Folders</h2>
 
         <button class="btn btn-dark my-3">Add</button>
 
@@ -15,9 +15,18 @@
             <table class="table table-borderless table-striped">
                 @foreach (var folder in Model.Folders)
                 {
-                    <tr>
-                        <td><a asp-action="Index" asp-route-id="@folder.Id">@folder.Name</a></td>
-                    </tr>
+                    if (ViewBag.id == folder.Id)
+                    {
+                        <tr>
+                            <td><a asp-action="Index" asp-route-id="@folder.Id" style="font-weight: bold">@folder.Name</a></td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td><a asp-action="Index" asp-route-id="@folder.Id">@folder.Name</a></td>
+                        </tr>
+                    }
                     await showChildren(folder);
                 }
             </table>
@@ -44,9 +53,19 @@
     {
         foreach (var child in folder.ChildFolders)
         {
-            <tr>
-                <td style="text-indent: @(child.Depth + "rem")"><a asp-action="Index" asp-route-id="@child.Id">@child.Name</a></td>
-            </tr>
+            if (ViewBag.id == child.Id)
+            {
+                <tr>
+                    <td style="text-indent: @(child.Depth + "rem")"><a asp-action="Index" asp-route-id="@child.Id" style="font-weight: bold">@child.Name</a></td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    <td style="text-indent: @(child.Depth + "rem")"><a asp-action="Index" asp-route-id="@child.Id">@child.Name</a></td>
+                </tr>
+            }
+
             await showChildren(child);
         }
     }

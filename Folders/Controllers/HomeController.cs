@@ -25,6 +25,8 @@ namespace Folders.Controllers
 
         public IActionResult Index(int id)
         {
+            ViewBag.id = id;
+
             IEnumerable<Folder> foldersList = _context.Folders.ToList();
             List<File> filesList = _context.Files.Where(i => i.FolderId == id).ToList();
             var folderViewModels = new List<FolderViewModel>();
