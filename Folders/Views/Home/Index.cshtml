@@ -6,9 +6,9 @@
 
 <div class="row">
     <div class="col-6">
-        <h2 id="btn">Folders</h2>
+        <h2>Folders</h2>
 
-        <button class="btn btn-dark my-3">Add</button>
+        <a class="btn btn-dark my-3" asp-controller="Folders" asp-action="Create">Add</a>
 
         @if (Model.Folders.Count() > 0)
         {
@@ -41,7 +41,7 @@
         {
             <h2>@Model.SelectedFolder.Name</h2>
 
-            <button class="btn btn-dark my-3">Add</button>
+            <a class="btn btn-dark my-3" asp-controller="Files" asp-action="Create">Add</a>
 
             <partial name="_Files.cshtml" />
         }
@@ -65,7 +65,6 @@
                     <td style="text-indent: @(child.Depth + "rem")"><a asp-action="Index" asp-route-id="@child.Id">@child.Name</a></td>
                 </tr>
             }
-
             await showChildren(child);
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Folders.Models;
+using Folders;
 
 namespace Folders.Data
 {
@@ -38,5 +39,7 @@ namespace Folders.Data
 
             base.OnModelCreating(modelBuilder);
         }
+
+        public DbSet<Folders.FolderViewModel> FolderViewModel { get; set; }
     }
 }
