@@ -29,6 +29,7 @@ namespace Folders.Controllers
 
             IEnumerable<Folder> foldersList = _context.Folders.ToList();
             List<File> filesList = _context.Files.Where(i => i.FolderId == id).ToList();
+            filesList = filesList.OrderBy(i => i.Name).ToList();
             var folderViewModels = new List<FolderViewModel>();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
