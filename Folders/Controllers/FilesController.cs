@@ -46,10 +46,17 @@ namespace Folders.Controllers
         }
 
         // GET: Files/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
-            ViewData["FolderId"] = new SelectList(_context.Folders, "Id", "Id");
-            return View();
+            if (!id.HasValue)
+            {
+                ViewData["FolderId"] = new SelectList(_context.Folders, "Id", "Name");
+            }
+            else
+            {
+                ViewData["FolderName"] = _context.Folders.First(i => i.Id == id).Name;
+            }
+            return View(new File() { FolderId = id.HasValue ? id.Value : 0 });
         }
 
         // POST: Files/Create
@@ -57,10 +64,11 @@ namespace Folders.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FolderId,Name")] File file)
+        public async Task<IActionResult> Create([Bind("FolderId,Name")] File file, int? id)
         {
             if (ModelState.IsValid)
             {
+                file.FolderId = id.Value;
                 _context.Add(file);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

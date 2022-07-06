@@ -4,20 +4,30 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+@if (Model.FolderId != 0)
+{
+    <h1>Add a new file in @ViewBag.FolderName folder</h1>
+}
+else
+{
+    <h1>Add a new file</h1>
 
-<h4>File</h4>
+}
+
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @if (Model.FolderId == 0)
+            {
+                <div class="form-group">
+                    <label asp-for="FolderId" class="control-label">Folder</label>
+                    <select asp-for="FolderId" class="form-control" asp-items="ViewBag.FolderId"></select>
+                </div>
+            }
             <div class="form-group">
-                <label asp-for="FolderId" class="control-label"></label>
-                <select asp-for="FolderId" class ="form-control" asp-items="ViewBag.FolderId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">File name</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
@@ -28,9 +38,19 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@if (Model.FolderId == 0)
+{
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+}
+else
+{
+    <div>
+        <a asp-controller="Home" asp-action="Index">Back to Folders</a>
+    </div>
+}
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

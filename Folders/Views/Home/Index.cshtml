@@ -8,7 +8,7 @@
     <div class="col-6">
         <h2>Folders</h2>
 
-        <a class="btn btn-dark my-3" asp-controller="Folders" asp-action="Create">Add</a>
+        <a class="btn btn-dark my-3" asp-controller="Folders" asp-action="Create" asp-route-id="@ViewBag.id">Add</a>
 
         @if (Model.Folders.Count() > 0)
         {
@@ -41,7 +41,7 @@
         {
             <h2>@Model.SelectedFolder.Name</h2>
 
-            <a class="btn btn-dark my-3" asp-controller="Files" asp-action="Create">Add</a>
+            <a class="btn btn-dark my-3" asp-controller="Files" asp-action="Create" asp-route-id="@ViewBag.id">Add</a>
 
             <partial name="_Files.cshtml" />
         }
