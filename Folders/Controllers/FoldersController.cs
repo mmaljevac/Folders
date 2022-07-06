@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Folders.Data;
 using Folders.Models;
+using System.Security.Claims;
 
 namespace Folders.Controllers
 {
@@ -80,8 +81,10 @@ namespace Folders.Controllers
                     folder.ParentId = parentFolder.Id;
                 }
                 _context.Add(folder);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                _context.Permissions.Add(new Permission { Folder = folder, UserId = userId });
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Home", new { id = folder.Id });
             }
             ViewData["ParentId"] = new SelectList(_context.Folders, "Id", "Id", folder.ParentId);
             return View(folder);
@@ -134,7 +137,7 @@ namespace Folders.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Home", new { id = folder.Id });
             }
             ViewData["ParentId"] = new SelectList(_context.Folders, "Id", "Id", folder.ParentId);
             return View(folder);
@@ -165,9 +168,22 @@ namespace Folders.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var folder = await _context.Folders.FindAsync(id);
-            _context.Folders.Remove(folder);
+            DeleteChildFoldersAndFiles(folder, _context);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), "Home", new { id = folder.ParentId });
+        }
+
+        private void DeleteChildFoldersAndFiles(Folder folder, ApplicationDbContext _context)
+        {
+            foreach (Folder child in _context.Folders.Where(i => i.ParentId == folder.Id))
+            {
+                DeleteChildFoldersAndFiles(child, _context);
+            }
+            foreach (File f in _context.Files.Where(i => i.FolderId == folder.Id))
+            {
+                _context.Files.Remove(f);
+            }
+            _context.Folders.Remove(folder);
         }
 
         private bool FolderExists(int id)

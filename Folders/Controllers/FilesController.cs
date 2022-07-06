@@ -71,7 +71,7 @@ namespace Folders.Controllers
                 file.FolderId = id.Value;
                 _context.Add(file);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Home", new { id = file.FolderId });
             }
             ViewData["FolderId"] = new SelectList(_context.Folders, "Id", "Id", file.FolderId);
             return View(file);
@@ -124,7 +124,7 @@ namespace Folders.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), "Home", new { id = file.FolderId });
             }
             ViewData["FolderId"] = new SelectList(_context.Folders, "Id", "Id", file.FolderId);
             return View(file);
@@ -157,7 +157,7 @@ namespace Folders.Controllers
             var file = await _context.Files.FindAsync(id);
             _context.Files.Remove(file);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), "Home", new { id = file.FolderId });
         }
 
         private bool FileExists(int id)
