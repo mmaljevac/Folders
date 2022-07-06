@@ -8,7 +8,7 @@
     <div class="col-6">
         <h2>Folders</h2>
 
-        <a class="btn btn-dark my-3" asp-controller="Folders" asp-action="Create" asp-route-id="@ViewBag.id">Add</a>
+        <a class="btn btn-dark my-3" asp-controller="Folders" asp-action="Create">Add folder</a>
 
         @if (Model.Folders.Count() > 0)
         {
@@ -18,13 +18,17 @@
                     if (ViewBag.id == folder.Id)
                     {
                         <tr>
-                            <td><a asp-action="Index" asp-route-id="@folder.Id" style="font-weight: bold">@folder.Name</a></td>
+                            <td>
+                                <a asp-controller="Folders" asp-action="Details" asp-route-id="@folder.Id" style="font-weight: bold" class="black">@folder.Name</a>
+                                <a asp-controller="Folders" asp-action="Create" asp-route-id="@folder.Id" class="right black">+ New folder</a>
+                            </td>
+                            
                         </tr>
                     }
                     else
                     {
                         <tr>
-                            <td><a asp-action="Index" asp-route-id="@folder.Id">@folder.Name</a></td>
+                            <td><a asp-action="Index" asp-route-id="@folder.Id" class="black">@folder.Name</a></td>
                         </tr>
                     }
                     await showChildren(folder);
@@ -39,9 +43,9 @@
     <div class="col-6">
         @if (Model.SelectedFolder != null)
         {
-            <h2>@Model.SelectedFolder.Name</h2>
+            <h2>Files in <a asp-controller="Folders" asp-action="Details" asp-route-id="@ViewBag.id">@Model.SelectedFolder.Name</a></h2>
 
-            <a class="btn btn-dark my-3" asp-controller="Files" asp-action="Create" asp-route-id="@ViewBag.id">Add</a>
+            <a class="btn btn-dark my-3" asp-controller="Files" asp-action="Create" asp-route-id="@ViewBag.id">Add file</a>
 
             <partial name="_Files.cshtml" />
         }
@@ -56,13 +60,16 @@
             if (ViewBag.id == child.Id)
             {
                 <tr>
-                    <td style="text-indent: @(child.Depth + "rem")"><a asp-action="Index" asp-route-id="@child.Id" style="font-weight: bold">@child.Name</a></td>
+                    <td style="text-indent: @(child.Depth + "rem")">
+                        <a asp-controller="Folders" asp-action="Details" asp-route-id="@child.Id" style="font-weight: bold" class="black">@child.Name</a>
+                        <a asp-controller="Folders" asp-action="Create" asp-route-id="@child.Id" class="right black">+ New folder</a>
+                    </td>
                 </tr>
             }
             else
             {
                 <tr>
-                    <td style="text-indent: @(child.Depth + "rem")"><a asp-action="Index" asp-route-id="@child.Id">@child.Name</a></td>
+                    <td style="text-indent: @(child.Depth + "rem")"><a asp-action="Index" asp-route-id="@child.Id" class="black">@child.Name</a></td>
                 </tr>
             }
             await showChildren(child);

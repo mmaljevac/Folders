@@ -42,7 +42,7 @@ namespace Folders.Controllers
             {
                 foreach (Folder folder in foldersList.Where(f => f.Depth == depth))
                 {
-                    if (depth == 0 && folderPermissionIds.Contains(folder.Id)) // folder permissions
+                    if (depth == 0 && folder.ParentId != null && folderPermissionIds.Contains(folder.Id)) // folder permissions
                     {
                         folderViewModels.Add(new FolderViewModel
                         {

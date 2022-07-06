@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="ParentId" class="control-label"></label>
+                <label asp-for="ParentId" class="control-label">Parent Folder</label>
                 <select asp-for="ParentId" class="form-control" asp-items="ViewBag.ParentId"></select>
                 <span asp-validation-for="ParentId" class="text-danger"></span>
             </div>
@@ -36,7 +36,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Folders" asp-action="Details" asp-route-id="@Model.Id">Back</a>
 </div>
 
 @section Scripts {

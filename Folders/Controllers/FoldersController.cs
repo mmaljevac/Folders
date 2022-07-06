@@ -46,10 +46,17 @@ namespace Folders.Controllers
         }
 
         // GET: Folders/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
-            ViewData["ParentId"] = new SelectList(_context.Folders, "Id", "Id");
-            return View();
+            if (!id.HasValue)
+            {
+                ViewData["ParentId"] = new SelectList(_context.Folders, "Id", "Name");
+            }
+            else
+            {
+                ViewData["ParentName"] = _context.Folders.First(i => i.Id == id).Name;
+            }
+            return View(new Folder() { ParentId = id.HasValue ? id.Value : 0 });
         }
 
         // POST: Folders/Create
@@ -57,10 +64,21 @@ namespace Folders.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ParentId,Name,Depth")] Folder folder)
+        public async Task<IActionResult> Create([Bind("ParentId,Name,Depth")] Folder folder, int? id)
         {
             if (ModelState.IsValid)
             {
+                if (!id.HasValue)
+                {
+                    folder.Depth = 0;
+                    folder.ParentId = 19;
+                }
+                else
+                {
+                    var parentFolder = _context.Folders.First(i => i.Id == id);
+                    folder.Depth = parentFolder.Depth + 1;
+                    folder.ParentId = parentFolder.Id;
+                }
                 _context.Add(folder);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -82,7 +100,7 @@ namespace Folders.Controllers
             {
                 return NotFound();
             }
-            ViewData["ParentId"] = new SelectList(_context.Folders, "Id", "Id", folder.ParentId);
+            ViewData["ParentId"] = new SelectList(_context.Folders, "Id", "Name", folder.ParentId);
             return View(folder);
         }
 

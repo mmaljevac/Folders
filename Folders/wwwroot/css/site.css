@@ -72,6 +72,26 @@ body {
 
 /*----------------------------------------------------------------------------------------*/
 
-a, a:hover {
-    color: black;
+.black, .black:hover {
+    color: rgb(50, 50, 50);
+}
+
+.right {
+    position: absolute;
+    right: 30px;
+}
+
+.appear {
+    animation-name: appear;
+    animation-duration: 0.3s;
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }

@@ -11,7 +11,6 @@
 else
 {
     <h1>Add a new file</h1>
-
 }
 
 <hr />
@@ -47,7 +46,7 @@ else
 else
 {
     <div>
-        <a asp-controller="Home" asp-action="Index">Back to Folders</a>
+        <a asp-controller="Home" asp-action="Index" asp-route-id="@Model.FolderId">Back</a>
     </div>
 }
 

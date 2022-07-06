@@ -6,7 +6,7 @@
         @foreach (var file in Model.SelectedFolder.Files)
         {
             <tr>
-                <td>@file.Name</td>
+                <td><a asp-controller="Files" asp-action="Details" asp-route-id="@file.Id"class="black">@file.Name</a></td>
             </tr>
         }
     </table>
