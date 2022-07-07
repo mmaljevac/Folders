@@ -33,6 +33,7 @@ namespace Folders.Controllers
             var folderViewModels = new List<FolderViewModel>();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.userId = userId;
             IEnumerable<Permission> permissionsList = _context.Permissions.Where(p => p.UserId == userId);
             List<int> folderPermissionIds = permissionsList.Select(p => p.FolderId).ToList();
 

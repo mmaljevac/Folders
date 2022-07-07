@@ -4,53 +4,61 @@
     ViewData["Title"] = "Folders";
 }
 
-<div class="row">
-    <div class="col-6">
-        <h2>Folders</h2>
+@if (ViewBag.userId != null)
+{
+    <div class="row">
+        <div class="col-6">
+            <h2>Folders</h2>
 
-        <a class="btn btn-dark my-3" asp-controller="Folders" asp-action="Create">Add folder</a>
+            <a class="btn btn-dark my-3" asp-controller="Folders" asp-action="Create">Add folder</a>
 
-        @if (Model.Folders.Count() > 0)
-        {
-            <table class="table table-borderless table-striped">
-                @foreach (var folder in Model.Folders)
-                {
-                    if (ViewBag.id == folder.Id)
+            @if (Model.Folders.Count() > 0)
+            {
+                <table class="table table-borderless table-striped">
+                    @foreach (var folder in Model.Folders)
                     {
-                        <tr>
-                            <td>
-                                <a asp-controller="Folders" asp-action="Details" asp-route-id="@folder.Id" style="font-weight: bold" class="black">@folder.Name</a>
-                                <a asp-controller="Folders" asp-action="Create" asp-route-id="@folder.Id" class="right black">+ New folder</a>
-                            </td>
-                            
-                        </tr>
-                    }
-                    else
-                    {
-                        <tr>
-                            <td><a asp-action="Index" asp-route-id="@folder.Id" class="black">@folder.Name</a></td>
-                        </tr>
-                    }
-                    await showChildren(folder);
-                }
-            </table>
-        }
-        else
-        {
-            <p>No folders available.</p>
-        }
-    </div>
-    <div class="col-6">
-        @if (Model.SelectedFolder != null)
-        {
-            <h2>Files in <a asp-controller="Folders" asp-action="Details" asp-route-id="@ViewBag.id">@Model.SelectedFolder.Name</a></h2>
+                        if (ViewBag.id == folder.Id)
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-controller="Folders" asp-action="Details" asp-route-id="@folder.Id" style="font-weight: bold" class="black">@folder.Name</a>
+                                    <a asp-controller="Folders" asp-action="Create" asp-route-id="@folder.Id" class="right black">+ New folder</a>
+                                </td>
 
-            <a class="btn btn-dark my-3" asp-controller="Files" asp-action="Create" asp-route-id="@ViewBag.id">Add file</a>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                <td><a asp-action="Index" asp-route-id="@folder.Id" class="black">@folder.Name</a></td>
+                            </tr>
+                        }
+                        await showChildren(folder);
+                    }
+                </table>
+            }
+            else
+            {
+                <p>No folders available.</p>
+            }
+        </div>
+        <div class="col-6">
+            @if (Model.SelectedFolder != null)
+            {
+                <h2>Files in <a asp-controller="Folders" asp-action="Details" asp-route-id="@ViewBag.id">@Model.SelectedFolder.Name</a></h2>
 
-            <partial name="_Files.cshtml" />
-        }
+                <a class="btn btn-dark my-3" asp-controller="Files" asp-action="Create" asp-route-id="@ViewBag.id">Add file</a>
+
+                <partial name="_Files.cshtml" />
+            }
+        </div>
     </div>
-</div>
+
+}
+else
+{
+    <p>Login or register to continue.</p>
+}
 
 @{
     async System.Threading.Tasks.Task showChildren(FolderViewModel folder)
