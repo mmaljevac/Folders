@@ -34,8 +34,11 @@ namespace Folders.Controllers
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             ViewBag.userId = userId;
-            IEnumerable<Permission> permissionsList = _context.Permissions.Where(p => p.UserId == userId);
-            List<int> folderPermissionIds = permissionsList.Select(p => p.FolderId).ToList();
+            var folderPermissionsList = new List<int>();
+            foreach (Permission p in _context.Permissions.Where(i => i.UserId == userId))
+            {
+                folderPermissionsList.Add(p.FolderId);
+            }
 
             int maxDepth = foldersList.Max(i => i.Depth);
 
@@ -43,7 +46,8 @@ namespace Folders.Controllers
             {
                 foreach (Folder folder in foldersList.Where(f => f.Depth == depth))
                 {
-                    if (depth == 0 && folder.ParentId != null && folderPermissionIds.Contains(folder.Id)) // folder permissions
+                    // FOLDER PERMISSIONS (first level, not root folder, user has permission or viewing shared folder)
+                    if (depth == 0 && folder.ParentId != null && (folderPermissionsList.Contains(folder.Id) || folder.Id == 2))
                     {
                         folderViewModels.Add(new FolderViewModel
                         {

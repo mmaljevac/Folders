@@ -24,6 +24,8 @@ namespace Folders.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Folders.Include(f => f.ParentFolder);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.userId = userId;
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -72,7 +74,7 @@ namespace Folders.Controllers
                 if (!id.HasValue)
                 {
                     folder.Depth = 0;
-                    folder.ParentId = 19;
+                    folder.ParentId = 1;
                 }
                 else
                 {

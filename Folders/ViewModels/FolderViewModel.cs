@@ -19,6 +19,6 @@ namespace Folders
     public class MainViewModel
     {
         public List<FolderViewModel> Folders { get; set; }
-        public FolderViewModel? SelectedFolder { get; set; }
+        public FolderViewModel SelectedFolder { get; set; }
     }
 }

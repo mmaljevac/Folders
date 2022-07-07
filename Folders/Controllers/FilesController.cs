@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Folders.Data;
 using Folders.Models;
+using System.Security.Claims;
 
 namespace Folders.Controllers
 {
@@ -23,6 +24,8 @@ namespace Folders.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Files.Include(f => f.Folder);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ViewBag.userId = userId;
             return View(await applicationDbContext.ToListAsync());
         }
 
