@@ -121,6 +121,8 @@ namespace Folders.Controllers
 
             if (ModelState.IsValid)
             {
+                var parentFolder = _context.Folders.First(i => i.Id == folder.ParentId);
+                folder.Depth = parentFolder.Depth + 1;
                 try
                 {
                     _context.Update(folder);
