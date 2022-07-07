@@ -4,6 +4,10 @@
     ViewData["Title"] = "Details";
 }
 
+<div>
+    <a asp-controller="Home" asp-action="Index" asp-route-id="@Model.FolderId" class="my-2 btn btn-sm bg-light">&lt; Back</a>
+</div>
+
 <h1>Details</h1>
 
 <div>
@@ -26,6 +30,5 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
-    <a asp-controller="Home" asp-action="Index" asp-route-id="@Model.FolderId">Back</a>
+    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
 </div>

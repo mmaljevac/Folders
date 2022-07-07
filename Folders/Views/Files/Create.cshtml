@@ -4,6 +4,19 @@
     ViewData["Title"] = "Create";
 }
 
+@if (Model.FolderId == 0)
+{
+    <div>
+        <a asp-action="Index" class="my-2 btn btn-sm bg-light">&lt; Back to List</a>
+    </div>
+}
+else
+{
+    <div>
+        <a asp-controller="Home" asp-action="Index" asp-route-id="@Model.FolderId" class="my-2 btn btn-sm bg-light">&lt; Back</a>
+    </div>
+}
+
 @if (Model.FolderId != 0)
 {
     <h1>Add a new file in @ViewBag.FolderName folder</h1>
@@ -36,20 +49,6 @@ else
         </form>
     </div>
 </div>
-
-@if (Model.FolderId == 0)
-{
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
-}
-else
-{
-    <div>
-        <a asp-controller="Home" asp-action="Index" asp-route-id="@Model.FolderId">Back</a>
-    </div>
-}
-
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

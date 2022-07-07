@@ -4,6 +4,10 @@
     ViewData["Title"] = "Edit";
 }
 
+<div>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="my-2 btn btn-sm bg-light">&lt; Back</a>
+</div>
+
 <h1>Edit</h1>
 
 <h4>File</h4>
@@ -28,10 +32,6 @@
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Details" asp-route-id="@Model.Id">Back</a>
 </div>
 
 @section Scripts {

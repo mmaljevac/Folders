@@ -53,7 +53,7 @@ namespace Folders.Controllers
         {
             if (!id.HasValue)
             {
-                ViewData["FolderId"] = new SelectList(_context.Folders, "Id", "Name");
+                ViewData["FolderId"] = new SelectList(_context.Folders.Where(i => i.ParentId != null), "Id", "Name");
             }
             else
             {
@@ -93,7 +93,8 @@ namespace Folders.Controllers
             {
                 return NotFound();
             }
-            ViewData["FolderId"] = new SelectList(_context.Folders, "Id", "Name", file.FolderId);
+
+            ViewData["FolderId"] = new SelectList(_context.Folders.Where(i => i.ParentId != null), "Id", "Name", file.FolderId);
             return View(file);
         }
 

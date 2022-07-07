@@ -4,6 +4,10 @@
     ViewData["Title"] = "Create";
 }
 
+<div>
+    <a asp-controller="Home" asp-action="Index" class="my-2 btn btn-sm bg-light">&lt; Back</a>
+</div>
+
 @if (Model.ParentId != 0)
 {
     <h1>Add a new folder in @ViewBag.ParentName folder</h1>
@@ -28,10 +32,6 @@ else
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

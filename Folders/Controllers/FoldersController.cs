@@ -105,7 +105,7 @@ namespace Folders.Controllers
             {
                 return NotFound();
             }
-            ViewData["ParentId"] = new SelectList(_context.Folders, "Id", "Name", folder.ParentId);
+            ViewData["ParentId"] = new SelectList(_context.Folders.Where(i => i.ParentId != null), "Id", "Name", folder.ParentId);
             return View(folder);
         }
 
